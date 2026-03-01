@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognorogue - Cognitive Roguelike</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+        <div id="ui-overlay">
+            <!-- Title Screen -->
+            <div id="title-screen" class="screen active">
+                <h1 class="title-text">COGNOROGUE</h1>
+                <p class="subtitle">A Cognitive Assessment Roguelike</p>
+                <div class="menu-options">
+                    <button id="btn-start" class="menu-btn">START GAME</button>
+                    <button id="btn-how" class="menu-btn">HOW TO PLAY</button>
+                </div>
+                <div class="controls-hint">
+                    <p>WASD / Arrow Keys to Move &bull; Space to Attack</p>
+                    <p>Shift to Dodge &bull; F to Block/Parry</p>
+                </div>
+            </div>
+
+            <!-- How To Play -->
+            <div id="how-screen" class="screen">
+                <h2>HOW TO PLAY</h2>
+                <div class="how-content">
+                    <div class="how-section">
+                        <h3>Controls</h3>
+                        <p><strong>A/D or Left/Right:</strong> Move</p>
+                        <p><strong>W or Up:</strong> Jump</p>
+                        <p><strong>Space:</strong> Attack</p>
+                        <p><strong>Shift:</strong> Dodge Roll (i-frames)</p>
+                        <p><strong>F:</strong> Block / Parry (timing-based)</p>
+                    </div>
+                    <div class="how-section">
+                        <h3>Combat</h3>
+                        <p>Enemies telegraph attacks with visual cues. Learn their patterns!</p>
+                        <p><strong>Parry:</strong> Block at the right moment to stun enemies and deal bonus damage.</p>
+                        <p><strong>Dodge:</strong> Roll through attacks with invincibility frames.</p>
+                        <p><strong>Combo:</strong> Chain attacks for bonus damage.</p>
+                    </div>
+                    <div class="how-section">
+                        <h3>Cognitive Assessment</h3>
+                        <p>Your gameplay is analyzed to measure:</p>
+                        <ul>
+                            <li>Reaction Time</li>
+                            <li>Pattern Recognition</li>
+                            <li>Working Memory</li>
+                            <li>Multitasking Ability</li>
+                            <li>Decision Making</li>
+                            <li>Sustained Attention</li>
+                        </ul>
+                    </div>
+                </div>
+                <button id="btn-back" class="menu-btn">BACK</button>
+            </div>
+
+            <!-- HUD -->
+            <div id="hud" class="screen">
+                <div id="hud-top">
+                    <div id="health-bar-container">
+                        <div id="health-bar"></div>
+                        <span id="health-text">HP</span>
+                    </div>
+                    <div id="stamina-bar-container">
+                        <div id="stamina-bar"></div>
+                        <span id="stamina-text">ST</span>
+                    </div>
+                    <div id="score-display">
+                        <span id="score-text">Score: 0</span>
+                    </div>
+                    <div id="level-display">
+                        <span id="level-text">Floor 1</span>
+                    </div>
+                    <div id="combo-display" class="hidden">
+                        <span id="combo-text">x1</span>
+                    </div>
+                </div>
+                <div id="pattern-hint" class="hidden">
+                    <span id="pattern-text"></span>
+                </div>
+                <div id="wave-announce" class="hidden">
+                    <span id="wave-text"></span>
+                </div>
+            </div>
+
+            <!-- Death / Game Over -->
+            <div id="gameover-screen" class="screen">
+                <h2 id="gameover-title">DEFEATED</h2>
+                <p id="gameover-score"></p>
+                <p id="gameover-floor"></p>
+                <button id="btn-report" class="menu-btn">VIEW COGNITIVE REPORT</button>
+                <button id="btn-retry" class="menu-btn">TRY AGAIN</button>
+            </div>
+
+            <!-- Cognitive Report -->
+            <div id="report-screen" class="screen">
+                <h2>COGNITIVE ASSESSMENT REPORT</h2>
+                <div id="report-content"></div>
+                <button id="btn-report-back" class="menu-btn">BACK</button>
+                <button id="btn-report-menu" class="menu-btn">MAIN MENU</button>
+            </div>
+
+            <!-- Level Transition -->
+            <div id="transition-screen" class="screen">
+                <h2 id="transition-text">FLOOR CLEARED</h2>
+                <p id="transition-sub"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/sprites.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/cognitive.js"></script>
+    <script src="js/patterns.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/enemy.js"></script>
+    <script src="js/level.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/engine.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
