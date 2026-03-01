@@ -33,7 +33,7 @@ const UI = (() => {
         // Button handlers
         document.getElementById('btn-start').addEventListener('click', () => {
             Audio.menuSelect();
-            if (window.Game) Game.start();
+            Game.start();
         });
         document.getElementById('btn-how').addEventListener('click', () => {
             Audio.menuSelect();
@@ -45,7 +45,7 @@ const UI = (() => {
         });
         document.getElementById('btn-retry').addEventListener('click', () => {
             Audio.menuSelect();
-            if (window.Game) Game.start();
+            Game.start();
         });
         document.getElementById('btn-report').addEventListener('click', () => {
             Audio.menuSelect();

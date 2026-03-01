@@ -2,19 +2,27 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
-body {
+html, body {
     background: #0a0a0f;
     overflow: hidden;
     font-family: 'Courier New', monospace;
     color: #e0e0e0;
+    height: 100%;
+    width: 100%;
+    touch-action: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    overscroll-behavior: none;
 }
 
 #game-container {
     position: relative;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -56,6 +64,7 @@ body {
 /* Title Screen */
 #title-screen {
     background: rgba(10, 10, 26, 0.95);
+    padding: 20px;
 }
 
 .title-text {
@@ -91,7 +100,7 @@ body {
 .menu-btn {
     font-family: 'Courier New', monospace;
     font-size: 18px;
-    padding: 12px 40px;
+    padding: 14px 40px;
     background: transparent;
     border: 2px solid #ff4444;
     color: #ff4444;
@@ -101,7 +110,7 @@ body {
     min-width: 250px;
 }
 
-.menu-btn:hover {
+.menu-btn:hover, .menu-btn:active {
     background: #ff4444;
     color: #0a0a1a;
     box-shadow: 0 0 20px rgba(255, 68, 68, 0.4);
@@ -187,6 +196,7 @@ body {
     display: flex;
     align-items: center;
     gap: 16px;
+    z-index: 10;
 }
 
 #health-bar-container, #stamina-bar-container {
@@ -292,6 +302,7 @@ body {
 /* Game Over */
 #gameover-screen {
     background: rgba(10, 5, 5, 0.95);
+    padding: 20px;
 }
 
 #gameover-screen h2 {
@@ -432,6 +443,126 @@ body {
     display: none !important;
 }
 
+/* ============================================================
+   MOBILE TOUCH CONTROLS
+   ============================================================ */
+
+#touch-controls {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 140px;
+    pointer-events: auto;
+    z-index: 100;
+    padding: 0 12px 12px;
+}
+
+#touch-dpad {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    width: 170px;
+    height: 120px;
+}
+
+#touch-actions {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.touch-btn {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: none;
+}
+
+.dpad-btn {
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 22px;
+}
+
+.dpad-btn:active, .dpad-btn.pressed {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+#touch-left {
+    left: 0;
+    bottom: 10px;
+}
+
+#touch-right {
+    left: 76px;
+    bottom: 10px;
+}
+
+#touch-jump {
+    left: 38px;
+    top: 0;
+}
+
+.action-btn {
+    width: 62px;
+    height: 62px;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.action-btn:active, .action-btn.pressed {
+    transform: scale(0.92);
+}
+
+#touch-attack {
+    background: rgba(255, 68, 68, 0.25);
+    border: 2px solid rgba(255, 68, 68, 0.5);
+    color: #ff6666;
+    width: 68px;
+    height: 68px;
+    font-size: 13px;
+}
+
+#touch-attack:active, #touch-attack.pressed {
+    background: rgba(255, 68, 68, 0.5);
+}
+
+#touch-dodge {
+    background: rgba(68, 136, 255, 0.25);
+    border: 2px solid rgba(68, 136, 255, 0.5);
+    color: #6699ff;
+}
+
+#touch-dodge:active, #touch-dodge.pressed {
+    background: rgba(68, 136, 255, 0.5);
+}
+
+#touch-block {
+    background: rgba(255, 204, 0, 0.2);
+    border: 2px solid rgba(255, 204, 0, 0.45);
+    color: #ffcc44;
+}
+
+#touch-block:active, #touch-block.pressed {
+    background: rgba(255, 204, 0, 0.45);
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 6px;
@@ -448,4 +579,264 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+
+/* ============================================================
+   MOBILE RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px), (hover: none) and (pointer: coarse) {
+    #touch-controls {
+        display: block;
+    }
+
+    .controls-hint {
+        display: none;
+    }
+
+    .title-text {
+        font-size: 40px;
+        letter-spacing: 4px;
+    }
+
+    .subtitle {
+        font-size: 12px;
+        margin-bottom: 24px;
+        letter-spacing: 2px;
+    }
+
+    .menu-btn {
+        font-size: 16px;
+        padding: 14px 30px;
+        min-width: 200px;
+    }
+
+    #how-screen {
+        padding: 20px 16px;
+    }
+
+    #how-screen h2 {
+        font-size: 24px;
+        margin-bottom: 16px;
+    }
+
+    .how-content {
+        gap: 12px;
+    }
+
+    .how-section {
+        min-width: 100%;
+        padding: 14px;
+    }
+
+    .how-section h3 { font-size: 15px; }
+    .how-section p { font-size: 13px; }
+
+    #hud-top {
+        top: 6px;
+        left: 6px;
+        right: 6px;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    #health-bar-container {
+        width: 120px;
+        height: 16px;
+    }
+
+    #stamina-bar-container {
+        width: 80px;
+        height: 12px;
+    }
+
+    #health-text, #stamina-text {
+        font-size: 9px;
+    }
+
+    #score-display {
+        font-size: 13px;
+    }
+
+    #level-display {
+        font-size: 12px;
+    }
+
+    #combo-display {
+        font-size: 22px;
+        top: 40px;
+        right: 10px;
+    }
+
+    #wave-announce {
+        font-size: 22px;
+    }
+
+    #pattern-hint {
+        bottom: 150px;
+        font-size: 12px;
+    }
+
+    #gameover-screen h2 {
+        font-size: 36px;
+    }
+
+    #gameover-screen p {
+        font-size: 14px;
+    }
+
+    #report-screen {
+        padding: 16px;
+    }
+
+    #report-screen h2 {
+        font-size: 20px;
+        margin-bottom: 14px;
+        letter-spacing: 1px;
+    }
+
+    #report-content {
+        max-height: 50vh;
+        padding-right: 4px;
+    }
+
+    .report-category {
+        padding: 12px 14px;
+    }
+
+    .report-category h3 {
+        font-size: 13px;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .report-score {
+        font-size: 16px;
+    }
+
+    .report-detail {
+        font-size: 11px;
+    }
+
+    .report-summary {
+        padding: 14px;
+    }
+
+    .report-summary p {
+        font-size: 12px;
+    }
+
+    #transition-screen h2 {
+        font-size: 28px;
+    }
+
+    #transition-sub {
+        font-size: 14px;
+    }
+}
+
+/* Very small phones (iPhone SE etc) */
+@media (max-width: 400px) {
+    .title-text {
+        font-size: 30px;
+    }
+
+    .subtitle {
+        font-size: 10px;
+    }
+
+    .menu-btn {
+        font-size: 14px;
+        padding: 12px 20px;
+        min-width: 160px;
+    }
+
+    #touch-dpad {
+        width: 150px;
+    }
+
+    .dpad-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 18px;
+    }
+
+    #touch-right {
+        left: 64px;
+    }
+
+    #touch-jump {
+        left: 32px;
+    }
+
+    .action-btn {
+        width: 52px;
+        height: 52px;
+        font-size: 10px;
+    }
+
+    #touch-attack {
+        width: 58px;
+        height: 58px;
+    }
+
+    #touch-actions {
+        gap: 8px;
+    }
+}
+
+/* Landscape phone */
+@media (max-height: 450px) and (orientation: landscape) {
+    #touch-controls {
+        height: 100px;
+    }
+
+    .dpad-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 16px;
+    }
+
+    #touch-dpad {
+        width: 130px;
+        height: 90px;
+    }
+
+    #touch-right {
+        left: 60px;
+    }
+
+    #touch-jump {
+        left: 28px;
+    }
+
+    .action-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 10px;
+    }
+
+    #touch-attack {
+        width: 54px;
+        height: 54px;
+    }
+
+    #touch-actions {
+        gap: 6px;
+        bottom: 8px;
+    }
+
+    #hud-top {
+        top: 4px;
+    }
+
+    #health-bar-container {
+        width: 100px;
+        height: 14px;
+    }
+
+    #stamina-bar-container {
+        width: 60px;
+        height: 10px;
+    }
 }

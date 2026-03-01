@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Cognorogue - Cognitive Roguelike</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -109,6 +109,20 @@
             <div id="transition-screen" class="screen">
                 <h2 id="transition-text">FLOOR CLEARED</h2>
                 <p id="transition-sub"></p>
+            </div>
+        </div>
+
+        <!-- Mobile Touch Controls -->
+        <div id="touch-controls">
+            <div id="touch-dpad">
+                <button class="touch-btn dpad-btn" id="touch-left" data-action="left">&lt;</button>
+                <button class="touch-btn dpad-btn" id="touch-right" data-action="right">&gt;</button>
+                <button class="touch-btn dpad-btn" id="touch-jump" data-action="jump">^</button>
+            </div>
+            <div id="touch-actions">
+                <button class="touch-btn action-btn" id="touch-attack" data-action="attack">ATK</button>
+                <button class="touch-btn action-btn" id="touch-dodge" data-action="dodge">DOD</button>
+                <button class="touch-btn action-btn" id="touch-block" data-action="block">BLK</button>
             </div>
         </div>
     </div>
