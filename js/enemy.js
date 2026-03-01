@@ -6,45 +6,53 @@ const Enemy = (() => {
         skeleton: {
             name: 'Skeleton',
             spriteKey: 'skeleton',
-            hp: 40, w: 27, h: 30,
-            speed: 1.2, aggroRange: 200, attackRange: 55,
+            hp: 40, w: 22, h: 28,
+            speed: 0.8, aggroRange: 140, attackRange: 35,
             score: 100, color: '#d0d0c0'
         },
         goblin: {
             name: 'Goblin',
             spriteKey: 'goblin',
-            hp: 30, w: 21, h: 30,
-            speed: 2.0, aggroRange: 180, attackRange: 45,
+            hp: 30, w: 18, h: 28,
+            speed: 1.3, aggroRange: 120, attackRange: 30,
             score: 120, color: '#44aa44'
         },
         orc: {
             name: 'Orc',
             spriteKey: 'orc',
-            hp: 70, w: 27, h: 30,
-            speed: 1.0, aggroRange: 160, attackRange: 65,
+            hp: 70, w: 22, h: 28,
+            speed: 0.6, aggroRange: 110, attackRange: 40,
             score: 180, color: '#668844'
         },
         mage: {
             name: 'Dark Mage',
             spriteKey: 'mage',
-            hp: 35, w: 24, h: 33,
-            speed: 0.8, aggroRange: 280, attackRange: 250,
+            hp: 35, w: 20, h: 30,
+            speed: 0.5, aggroRange: 180, attackRange: 160,
             score: 200, color: '#6633aa'
         },
         assassin: {
             name: 'Shadow Assassin',
             spriteKey: 'assassin',
-            hp: 35, w: 21, h: 30,
-            speed: 2.5, aggroRange: 220, attackRange: 50,
+            hp: 35, w: 18, h: 28,
+            speed: 1.6, aggroRange: 150, attackRange: 32,
             score: 220, color: '#333344'
         },
         golem: {
             name: 'Stone Golem',
             spriteKey: 'golem',
-            hp: 200, w: 30, h: 36,
-            speed: 0.7, aggroRange: 250, attackRange: 80,
+            hp: 200, w: 26, h: 34,
+            speed: 0.4, aggroRange: 170, attackRange: 50,
             score: 500, color: '#887766',
             isBoss: true
+        },
+        friendly: {
+            name: 'Villager',
+            spriteKey: 'friendly',
+            hp: 20, w: 18, h: 28,
+            speed: 0.5, aggroRange: 0, attackRange: 0,
+            score: -200, color: '#44aa88',
+            isFriendly: true
         }
     };
 
@@ -371,10 +379,10 @@ const Enemy = (() => {
 
         // HP bar
         if (enemy.hp < enemy.maxHp) {
-            const barW = 30;
-            const barH = 3;
+            const barW = 20;
+            const barH = 2;
             const barX = enemy.x + enemy.w / 2 - barW / 2;
-            const barY = enemy.y - 8;
+            const barY = enemy.y - 6;
             ctx.fillStyle = '#333';
             ctx.fillRect(barX, barY, barW, barH);
             const hpPct = enemy.hp / enemy.maxHp;
@@ -385,9 +393,9 @@ const Enemy = (() => {
         // Boss name
         if (enemy.def.isBoss) {
             ctx.fillStyle = '#ff4444';
-            ctx.font = 'bold 10px Courier New';
+            ctx.font = 'bold 7px Courier New';
             ctx.textAlign = 'center';
-            ctx.fillText(enemy.def.name, enemy.x + enemy.w / 2, enemy.y - 14);
+            ctx.fillText(enemy.def.name, enemy.x + enemy.w / 2, enemy.y - 10);
             ctx.textAlign = 'left';
         }
 
@@ -398,9 +406,9 @@ const Enemy = (() => {
                 const progress = 1 - (enemy.patternTimer / phase.duration);
                 // Exclamation mark that fills up
                 ctx.fillStyle = `rgba(255, ${Math.floor(255 * (1 - progress))}, 0, ${0.5 + progress * 0.5})`;
-                ctx.font = `bold ${14 + progress * 6}px Courier New`;
+                ctx.font = `bold ${10 + progress * 4}px Courier New`;
                 ctx.textAlign = 'center';
-                ctx.fillText('!', enemy.x + enemy.w / 2, enemy.y - 20);
+                ctx.fillText('!', enemy.x + enemy.w / 2, enemy.y - 14);
                 ctx.textAlign = 'left';
 
                 // Range indicator

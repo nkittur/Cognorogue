@@ -2,12 +2,12 @@
 // UTILS - Core utility functions
 // ============================================================
 const Utils = {
-    // Canvas dimensions (will be set by engine)
-    GAME_WIDTH: 960,
-    GAME_HEIGHT: 540,
-    TILE_SIZE: 32,
-    GRAVITY: 0.6,
-    GROUND_Y: 440,
+    // Canvas dimensions - lower res = bigger pixels on mobile
+    GAME_WIDTH: 480,
+    GAME_HEIGHT: 270,
+    TILE_SIZE: 16,
+    GRAVITY: 0.45,
+    GROUND_Y: 220,
 
     clamp(val, min, max) {
         return Math.max(min, Math.min(max, val));

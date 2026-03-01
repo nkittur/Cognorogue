@@ -40,6 +40,15 @@ const Cognitive = (() => {
             // Inhibitory control (feint responses)
             feintResponses: [],          // { wasFeint, playerReacted, reactionTime }
 
+            // Friend/foe discrimination
+            friendlyEncounters: 0,
+            friendliesKilled: 0,
+            friendliesSpared: 0,
+            enemiesCorrectlyKilled: 0,
+
+            // Memory sequence challenges
+            memorySequences: [],         // { length, correct, time }
+
             // General gameplay
             totalDamageDealt: 0,
             totalDamageTaken: 0,
@@ -111,6 +120,14 @@ const Cognitive = (() => {
 
     function recordFeintResponse(wasFeint, playerReacted, reactionTime) {
         sessionData.feintResponses.push({ wasFeint, playerReacted, reactionTime });
+    }
+
+    function recordFriendlyEncounter() { sessionData.friendlyEncounters++; }
+    function recordFriendlyKilled() { sessionData.friendliesKilled++; }
+    function recordFriendlySpared() { sessionData.friendliesSpared++; }
+    function recordEnemyCorrectlyKilled() { sessionData.enemiesCorrectlyKilled++; }
+    function recordMemorySequence(length, correct, time) {
+        sessionData.memorySequences.push({ length, correct, time });
     }
 
     function recordDamageDealt(amount) { sessionData.totalDamageDealt += amount; }
@@ -213,7 +230,7 @@ const Cognitive = (() => {
             grade: gradeScore(Math.round(patternScore * 100)),
             details: {
                 patternsEncountered: patternIds.length,
-                avgLearningSpeed: patternCount > 0 ?
+                avgLearningSpeed: Object.keys(sessionData.patternFirstSuccess).length > 0 ?
                     (Object.values(sessionData.patternFirstSuccess).reduce((a, b) => a + b, 0) /
                     Object.keys(sessionData.patternFirstSuccess).length).toFixed(1) : 'N/A'
             },
@@ -245,7 +262,7 @@ const Cognitive = (() => {
             multiData.reduce((a, b) => a + b.performance, 0) / multiData.length : 0;
         const singlePerf = singleData.length > 0 ?
             singleData.reduce((a, b) => a + b.performance, 0) / singleData.length : 0;
-        const multitaskDegradation = singlePerf > 0 ? 1 - (multiPerf / singlePerf) : 0;
+        const multitaskDegradation = singlePerf > 0 ? (multiPerf - singlePerf) / singlePerf : 0;
         const multiScore = Math.round(Utils.clamp(1 - multitaskDegradation, 0, 1) * 100);
 
         report.multitasking = {
@@ -347,6 +364,47 @@ const Cognitive = (() => {
             description: getTimingDesc(timingScore)
         };
 
+        // 9. Friend/Foe Discrimination
+        const totalDisc = sessionData.friendlyEncounters;
+        const killed = sessionData.friendliesKilled;
+        const spared = sessionData.friendliesSpared;
+        const correctKills = sessionData.enemiesCorrectlyKilled;
+        let discScore = 50;
+        if (totalDisc > 0) {
+            const spareRate = spared / totalDisc;
+            discScore = Math.round(spareRate * 100);
+        }
+        report.discrimination = {
+            title: 'Friend/Foe Discrimination',
+            score: discScore,
+            grade: gradeScore(discScore),
+            details: {
+                friendliesEncountered: totalDisc,
+                friendliesSpared: spared,
+                friendliesKilled: killed,
+                enemiesCorrectlyDefeated: correctKills
+            },
+            description: getDiscriminationDesc(discScore, totalDisc)
+        };
+
+        // 10. Sequence Memory
+        const seqs = sessionData.memorySequences;
+        const seqCorrect = seqs.filter(s => s.correct).length;
+        const seqScore = seqs.length > 0 ? Math.round((seqCorrect / seqs.length) * 100) : 50;
+        const longestCorrect = seqs.filter(s => s.correct).reduce((max, s) => Math.max(max, s.length), 0);
+
+        report.sequenceMemory = {
+            title: 'Sequence Memory',
+            score: seqScore,
+            grade: gradeScore(seqScore),
+            details: {
+                sequencesAttempted: seqs.length,
+                sequencesCorrect: seqCorrect,
+                longestSequence: longestCorrect || 'N/A'
+            },
+            description: getSequenceDesc(seqScore)
+        };
+
         // Overall composite
         const allScores = [
             report.reactionTime.score,
@@ -356,22 +414,26 @@ const Cognitive = (() => {
             report.decisionMaking.score,
             report.sustainedAttention.score,
             report.inhibitoryControl.score,
-            report.motorTiming.score
+            report.motorTiming.score,
+            report.discrimination.score,
+            report.sequenceMemory.score
         ];
         const overallScore = Math.round(allScores.reduce((a, b) => a + b, 0) / allScores.length);
+
+        const overallDetails = {
+            floorsCleared: sessionData.floorsCleared,
+            enemiesDefeated: sessionData.enemiesDefeated,
+            finalScore: sessionData.score,
+            sessionDuration: sessionData.endTime ?
+                Utils.formatTime(sessionData.endTime - sessionData.startTime) : 'N/A'
+        };
 
         report.overall = {
             title: 'Overall Cognitive Performance',
             score: overallScore,
             grade: gradeScore(overallScore),
-            details: {
-                floorsCleared: sessionData.floorsCleared,
-                enemiesDefeated: sessionData.enemiesDefeated,
-                finalScore: sessionData.score,
-                sessionDuration: sessionData.endTime ?
-                    Utils.formatTime(sessionData.endTime - sessionData.startTime) : 'N/A'
-            },
-            summary: getOverallSummary(report)
+            details: overallDetails,
+            summary: getOverallSummary(report, overallDetails)
         };
 
         return report;
@@ -460,19 +522,34 @@ const Cognitive = (() => {
         return 'Timing precision needs improvement. Practice the parry timing against slower enemies first.';
     }
 
-    function getOverallSummary(report) {
+    function getDiscriminationDesc(score, total) {
+        if (total === 0) return 'No friendly NPCs were encountered this session.';
+        if (score >= 85) return 'Excellent target discrimination. You consistently spare allies and eliminate threats.';
+        if (score >= 65) return 'Good discrimination between friend and foe with occasional mistakes.';
+        if (score >= 40) return 'Moderate discrimination. Take time to identify targets before attacking.';
+        return 'Poor discrimination. Watch for green/friendly indicators before striking.';
+    }
+
+    function getSequenceDesc(score) {
+        if (score >= 80) return 'Strong sequential memory. You recall and reproduce patterns accurately.';
+        if (score >= 60) return 'Good sequence recall with some errors on longer sequences.';
+        if (score >= 40) return 'Average sequence memory. Longer patterns are challenging.';
+        return 'Sequence memory needs work. Try chunking patterns into smaller groups.';
+    }
+
+    function getOverallSummary(report, details) {
         const strengths = [];
         const weaknesses = [];
 
         const categories = [
             'reactionTime', 'patternRecognition', 'workingMemory',
             'multitasking', 'decisionMaking', 'sustainedAttention',
-            'inhibitoryControl', 'motorTiming'
+            'inhibitoryControl', 'motorTiming', 'discrimination', 'sequenceMemory'
         ];
 
         for (const cat of categories) {
-            if (report[cat].score >= 75) strengths.push(report[cat].title);
-            else if (report[cat].score < 45) weaknesses.push(report[cat].title);
+            if (report[cat] && report[cat].score >= 75) strengths.push(report[cat].title);
+            else if (report[cat] && report[cat].score < 45) weaknesses.push(report[cat].title);
         }
 
         let summary = '';
@@ -485,7 +562,7 @@ const Cognitive = (() => {
         if (strengths.length === 0 && weaknesses.length === 0) {
             summary += 'Overall balanced cognitive performance across all measured dimensions. ';
         }
-        summary += `You cleared ${report.overall.details.floorsCleared} floors and defeated ${report.overall.details.enemiesDefeated} enemies.`;
+        summary += `You cleared ${details.floorsCleared} floors and defeated ${details.enemiesDefeated} enemies.`;
         return summary;
     }
 
@@ -501,6 +578,11 @@ const Cognitive = (() => {
         recordMultiEnemySituation,
         recordDecision,
         recordFeintResponse,
+        recordFriendlyEncounter,
+        recordFriendlyKilled,
+        recordFriendlySpared,
+        recordEnemyCorrectlyKilled,
+        recordMemorySequence,
         recordDamageDealt,
         recordDamageTaken,
         recordEnemyDefeated,

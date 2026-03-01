@@ -181,7 +181,7 @@ const Game = (() => {
         Level.renderBackground(ctx);
 
         // Entities
-        Level.renderEntities(ctx);
+        Level.renderEntities(ctx, gameTime);
 
         // Player
         Player.render(ctx);
@@ -189,9 +189,9 @@ const Game = (() => {
         // Particles on top
         Particles.render(ctx);
 
-        // Scanline effect
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
-        for (let y = 0; y < Utils.GAME_HEIGHT; y += 3) {
+        // Scanline effect (every other line for perf on low-res)
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+        for (let y = 0; y < Utils.GAME_HEIGHT; y += 2) {
             ctx.fillRect(0, y, Utils.GAME_WIDTH, 1);
         }
 

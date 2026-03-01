@@ -706,6 +706,93 @@ const Sprites = (() => {
         ]]
     };
 
+    // Friendly NPC (Villager) - clearly green/peaceful look
+    const friendlyPalette = {
+        'H': '#ffcc88', // skin
+        'h': '#dd9966',
+        'E': '#44cc44', // green eyes (friendly indicator)
+        'G': '#33aa55', // green clothing
+        'g': '#228844',
+        'B': '#886644', // boots
+        'b': '#775533',
+        'W': '#ffffff',
+        'Y': '#ffff44', // halo/sparkle
+    };
+
+    const friendlyFrames = {
+        idle: [
+            [
+                '...YYY...',
+                '...HHH...',
+                '..HhHHH..',
+                '..EHHEH..',
+                '..hHHHh..',
+                '...GGG...',
+                '..gGGGg..',
+                '..gGGGg..',
+                '...GGG...',
+                '...G.G...',
+                '..Bb.bB..',
+            ],
+            [
+                '..Y.Y.Y..',
+                '...HHH...',
+                '..HhHHH..',
+                '..EHHEH..',
+                '..hHHHh..',
+                '...GGG...',
+                '..gGGGg..',
+                '..gGGGg..',
+                '...GGG...',
+                '...G.G...',
+                '..BB.BB..',
+            ]
+        ],
+        hurt: [[
+            '...YYY...',
+            '...HHH...',
+            '..HhHHH..',
+            '..hHHhh..',
+            '..hHHHh..',
+            '...GGG...',
+            '..gGGGg..',
+            '..gGGGg..',
+            '...GGG...',
+            '..G...G..',
+            '.Bb...bB.',
+        ]]
+    };
+
+    // Hazard (spike/fire) sprites
+    const hazardPalette = {
+        'F': '#ff6600',
+        'f': '#cc4400',
+        'Y': '#ffcc00',
+        'y': '#ff9900',
+        'R': '#ff2200',
+    };
+
+    const hazardFrames = {
+        idle: [
+            [
+                '..F..F..',
+                '.fYffYf.',
+                '.FYyyYF.',
+                'fYyyyyYf',
+                'FyyyyYYF',
+                'RRfRRfRR',
+            ],
+            [
+                '.F..F...',
+                'fYffYf..',
+                '.FYyyYF.',
+                '.YyyyyY.',
+                'FyYYYyyF',
+                'RRfRRfRR',
+            ]
+        ]
+    };
+
     // Projectile
     const projPalette = {
         'O': '#ff44ff',
@@ -737,13 +824,15 @@ const Sprites = (() => {
     }
 
     function init() {
-        compileEntitySprites('player', playerFrames, playerPalette, 3);
-        compileEntitySprites('skeleton', skelFrames, skelPalette, 3);
-        compileEntitySprites('goblin', gobFrames, gobPalette, 3);
-        compileEntitySprites('orc', orcFrames, orcPalette, 3);
-        compileEntitySprites('mage', mageFrames, magePalette, 3);
-        compileEntitySprites('assassin', assassinFrames, assassinPalette, 3);
-        compileEntitySprites('golem', golemFrames, golemPalette, 3);
+        compileEntitySprites('player', playerFrames, playerPalette, 2);
+        compileEntitySprites('skeleton', skelFrames, skelPalette, 2);
+        compileEntitySprites('goblin', gobFrames, gobPalette, 2);
+        compileEntitySprites('orc', orcFrames, orcPalette, 2);
+        compileEntitySprites('mage', mageFrames, magePalette, 2);
+        compileEntitySprites('assassin', assassinFrames, assassinPalette, 2);
+        compileEntitySprites('golem', golemFrames, golemPalette, 2);
+        compileEntitySprites('friendly', friendlyFrames, friendlyPalette, 2);
+        compileEntitySprites('hazard', hazardFrames, hazardPalette, 2);
         compileEntitySprites('projectile', projFrames, projPalette, 2);
     }
 

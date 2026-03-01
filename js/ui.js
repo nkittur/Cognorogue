@@ -157,7 +157,7 @@ const UI = (() => {
         const categories = [
             'reactionTime', 'patternRecognition', 'workingMemory',
             'multitasking', 'decisionMaking', 'sustainedAttention',
-            'inhibitoryControl', 'motorTiming'
+            'inhibitoryControl', 'motorTiming', 'discrimination', 'sequenceMemory'
         ];
 
         for (const key of categories) {

@@ -5,20 +5,20 @@ const Player = (() => {
     let state = {};
 
     const DEFAULTS = {
-        x: 100,
+        x: 60,
         y: 0,
         vx: 0,
         vy: 0,
-        w: 30,
-        h: 36,
+        w: 24,
+        h: 32,
         hp: 100,
         maxHp: 100,
         stamina: 100,
         maxStamina: 100,
         facingRight: true,
         grounded: false,
-        speed: 3.5,
-        jumpForce: -11,
+        speed: 2.2,
+        jumpForce: -8,
         // State machine
         action: 'idle', // idle, run, attack, dodge, block, hurt
         actionTimer: 0,
@@ -26,7 +26,7 @@ const Player = (() => {
         attackDuration: 300,
         attackCooldown: 0,
         attackDamage: 15,
-        attackRange: 55,
+        attackRange: 35,
         attackHitFrame: false,
         comboCount: 0,
         comboTimer: 0,
@@ -35,7 +35,7 @@ const Player = (() => {
         // Dodge
         dodgeDuration: 350,
         dodgeCooldown: 0,
-        dodgeSpeed: 7,
+        dodgeSpeed: 4.5,
         invincible: false,
         // Block / Parry
         blocking: false,
@@ -271,7 +271,7 @@ const Player = (() => {
         state.action = 'hurt';
         state.actionTimer = state.hurtDuration;
         state.iFrames = 500;
-        state.vx = knockbackDir * 4;
+        state.vx = knockbackDir * 2.5;
         state.flashTimer = 300;
         state.comboCount = 0;
         state.comboTimer = 0;
